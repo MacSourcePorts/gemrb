@@ -32,3 +32,7 @@ xcuserdata
 
 **/gemrb_path.txt
 **/GemRB.log
+
+build-arm64
+build-x86_64
+release

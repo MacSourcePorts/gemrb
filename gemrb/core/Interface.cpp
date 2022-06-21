@@ -1024,6 +1024,14 @@ int Interface::Init(const InterfaceConfig* cfg)
 	// if duplicates are found in the PluginsPath
 	char bundlePluginsPath[_MAX_PATH];
 	CopyBundlePath(bundlePluginsPath, sizeof(bundlePluginsPath), PLUGINS);
+	#if defined(__x86_64__)
+		char archstring[] = "/x86_64";
+		strcat(bundlePluginsPath,archstring);
+	#endif
+	#if defined(__arm64__)
+		char archstring[] = "/arm64";
+		strcat(bundlePluginsPath,archstring);
+	#endif
 	ResolveFilePath(bundlePluginsPath);
 #ifndef STATIC_LINK
 	LoadPlugins(bundlePluginsPath);
@@ -1040,6 +1048,7 @@ int Interface::Init(const InterfaceConfig* cfg)
 	}
 	plugin->RunInitializers();
 
+	// Log(MESSAGE, "Core", "Loading plugins {} {}", bundlePluginsPath, plugin->GetPluginCount());
 	Log(MESSAGE, "Core", "GemRB Core Initialization...");
 	Log(MESSAGE, "Core", "Initializing Video Driver...");
 	video = std::shared_ptr<Video>(static_cast<Video*>(PluginMgr::Get()->GetDriver(&Video::ID, config.VideoDriverName.c_str())));
